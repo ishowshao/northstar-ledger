@@ -9,6 +9,9 @@
       "recommended": true,
       "correctness": {
         "noUnusedVariables": "warn"
+      },
+      "a11y": {
+        "noLabelWithoutControl": "off"
       }
     }
   },

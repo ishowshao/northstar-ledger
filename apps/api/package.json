@@ -12,6 +12,7 @@
   "dependencies": {
     "@northstar/shared": "workspace:*",
     "@northstar/db": "workspace:*",
+    "@northstar/domain": "workspace:*",
     "@hono/zod-validator": "^0.4.0",
     "hono": "^4.6.0",
     "zod": "^3.24.0",

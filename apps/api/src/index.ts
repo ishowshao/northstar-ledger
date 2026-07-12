@@ -2,6 +2,11 @@ import { Hono } from "hono";
 import { cors } from "hono/cors";
 import { logger } from "hono/logger";
 import pino from "pino";
+import { accountsRoutes } from "./routes/accounts.js";
+import { customersRoutes } from "./routes/customers.js";
+import { projectsRoutes } from "./routes/projects.js";
+import { summaryRoutes } from "./routes/summary.js";
+import { transactionsRoutes } from "./routes/transactions.js";
 
 const app = new Hono();
 
@@ -22,14 +27,32 @@ app.get("/health", (c) => {
   return c.json({ status: "ok", version: "0.0.1" });
 });
 
-// ── Routes ──
+// ── API v1 Routes ──
 
 const api = new Hono();
 
-// 占位路由，后续逐步实现
-api.get("/", (c) => c.json({ message: "Northstar Ledger API" }));
+api.get("/", (c) => c.json({ message: "Northstar Ledger API v1" }));
+
+api.route("/accounts", accountsRoutes);
+api.route("/customers", customersRoutes);
+api.route("/projects", projectsRoutes);
+api.route("/transactions", transactionsRoutes);
+api.route("/summary", summaryRoutes);
 
 app.route("/api/v1", api);
+
+// ── Global Error Handler ──
+
+app.onError((err, c) => {
+  log.error({ err }, "Unhandled error");
+  return c.json(
+    {
+      error: "Internal server error",
+      message: process.env.NODE_ENV !== "production" ? err.message : undefined,
+    },
+    500,
+  );
+});
 
 // ── Startup ──
 

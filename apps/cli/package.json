@@ -12,6 +12,7 @@
   "dependencies": {
     "@northstar/shared": "workspace:*",
     "@northstar/db": "workspace:*",
+    "@northstar/domain": "workspace:*",
     "commander": "^13.0.0",
     "pino": "^9.5.0",
     "zod": "^3.24.0"

@@ -16,6 +16,7 @@
       "dependencies": {
         "@hono/zod-validator": "^0.4.0",
         "@northstar/db": "workspace:*",
+        "@northstar/domain": "workspace:*",
         "@northstar/shared": "workspace:*",
         "hono": "^4.6.0",
         "pino": "^9.5.0",
@@ -27,6 +28,7 @@
       "version": "0.0.1",
       "dependencies": {
         "@northstar/db": "workspace:*",
+        "@northstar/domain": "workspace:*",
         "@northstar/shared": "workspace:*",
         "commander": "^13.0.0",
         "pino": "^9.5.0",
@@ -74,6 +76,20 @@
       "devDependencies": {
         "@types/better-sqlite3": "^7.6.12",
         "drizzle-kit": "^0.30.0",
+      },
+    },
+    "packages/domain": {
+      "name": "@northstar/domain",
+      "version": "0.0.1",
+      "dependencies": {
+        "@northstar/db": "workspace:*",
+        "@northstar/shared": "workspace:*",
+        "drizzle-orm": "^0.38.0",
+        "zod": "^3.24.0",
+      },
+      "devDependencies": {
+        "@types/better-sqlite3": "^7.6.12",
+        "better-sqlite3": "^11.7.0",
       },
     },
     "packages/shared": {
@@ -218,6 +234,8 @@
     "@northstar/cli": ["@northstar/cli@workspace:apps/cli"],
 
     "@northstar/db": ["@northstar/db@workspace:packages/db"],
+
+    "@northstar/domain": ["@northstar/domain@workspace:packages/domain"],
 
     "@northstar/shared": ["@northstar/shared@workspace:packages/shared"],
 
