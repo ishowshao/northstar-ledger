@@ -1,5 +1,5 @@
 import { getDb, transactions } from "@northstar/db";
-import { and, eq, gte, lte, sql } from "drizzle-orm";
+import { and, gte, lte, sql } from "drizzle-orm";
 
 // ── Types ──
 

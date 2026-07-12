@@ -66,5 +66,24 @@ db.run(`CREATE TABLE IF NOT EXISTS transactions (
   updated_at TEXT NOT NULL
 )`);
 
+// 创建 import_jobs 表
+db.run(`CREATE TABLE IF NOT EXISTS import_jobs (
+  id TEXT PRIMARY KEY,
+  entity_type TEXT NOT NULL,
+  status TEXT NOT NULL DEFAULT 'pending',
+  file_name TEXT,
+  total_rows INTEGER NOT NULL DEFAULT 0,
+  valid_rows INTEGER NOT NULL DEFAULT 0,
+  error_rows INTEGER NOT NULL DEFAULT 0,
+  duplicate_rows INTEGER NOT NULL DEFAULT 0,
+  imported_rows INTEGER NOT NULL DEFAULT 0,
+  errors TEXT,
+  summary TEXT,
+  started_at TEXT,
+  completed_at TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+)`);
+
 console.log(`✅ Database initialized at ${dbPath}`);
 sqlite.close();

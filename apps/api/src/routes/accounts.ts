@@ -10,7 +10,6 @@ import {
 } from "@northstar/domain";
 import { DomainError } from "@northstar/shared";
 import { Hono } from "hono";
-import { z } from "zod";
 
 const router = new Hono();
 

@@ -2,5 +2,6 @@
 
 export { accounts } from "./accounts.js";
 export { customers } from "./customers.js";
+export { importJobs } from "./importJobs.js";
 export { projects } from "./projects.js";
 export { transactions } from "./transactions.js";

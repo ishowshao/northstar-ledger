@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import type { CreateProjectInput } from "@northstar/domain";
 import {
   createAccount,
   createCustomer,
@@ -6,20 +7,16 @@ import {
   createTransaction,
   deleteAccount,
   deleteCustomer,
-  deleteProject,
   deleteTransaction,
   getAccount,
-  getCustomer,
   getMonthlySummary,
   getPeriodSummary,
-  getProject,
   getTransaction,
   listAccounts,
   listCustomers,
   listProjects,
   listTransactions,
 } from "@northstar/domain";
-import type { CreateProjectInput } from "@northstar/domain";
 import { Command } from "commander";
 import pino from "pino";
 

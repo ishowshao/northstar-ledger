@@ -62,8 +62,8 @@ a:hover {
 .sidebar-logo {
   font-weight: 700;
   font-size: 1rem;
-  color: var(--color-text) !important;
-  text-decoration: none !important;
+  color: var(--color-text);
+  text-decoration: none;
 }
 
 .sidebar-nav {
@@ -238,7 +238,7 @@ a:hover {
   border: 1px solid var(--color-border);
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
   transition: border-color 0.15s, box-shadow 0.15s;
-  text-decoration: none !important;
+  text-decoration: none;
   color: var(--color-text);
 }
 .nav-card:hover {
