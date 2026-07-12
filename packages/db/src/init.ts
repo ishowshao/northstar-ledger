@@ -2,7 +2,7 @@ import { Database } from "bun:sqlite";
 import { drizzle } from "drizzle-orm/bun-sqlite";
 import * as schema from "./schema/index.js";
 
-const dbPath = process.env["DATABASE_PATH"] ?? "./data/northstar-ledger.db";
+const dbPath = process.env.DATABASE_PATH ?? "./data/northstar-ledger.db";
 
 // 先建库，设置 PRAGMA
 const sqlite = new Database(dbPath, { create: true });
