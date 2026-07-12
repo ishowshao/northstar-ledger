@@ -70,11 +70,9 @@
       "version": "0.0.1",
       "dependencies": {
         "@northstar/shared": "workspace:*",
-        "better-sqlite3": "^11.7.0",
         "drizzle-orm": "^0.38.0",
       },
       "devDependencies": {
-        "@types/better-sqlite3": "^7.6.12",
         "drizzle-kit": "^0.30.0",
       },
     },
@@ -86,10 +84,6 @@
         "@northstar/shared": "workspace:*",
         "drizzle-orm": "^0.38.0",
         "zod": "^3.24.0",
-      },
-      "devDependencies": {
-        "@types/better-sqlite3": "^7.6.12",
-        "better-sqlite3": "^11.7.0",
       },
     },
     "packages/shared": {

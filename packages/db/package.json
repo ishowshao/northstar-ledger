@@ -12,17 +12,16 @@
   "scripts": {
     "build": "bun build ./src/index.ts --outdir dist --target bun",
     "typecheck": "tsc --noEmit",
+    "init": "bun src/init.ts",
     "migrate": "drizzle-kit migrate",
     "push": "drizzle-kit push",
     "studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@northstar/shared": "workspace:*",
-    "drizzle-orm": "^0.38.0",
-    "better-sqlite3": "^11.7.0"
+    "drizzle-orm": "^0.38.0"
   },
   "devDependencies": {
-    "@types/better-sqlite3": "^7.6.12",
     "drizzle-kit": "^0.30.0"
   }
 }

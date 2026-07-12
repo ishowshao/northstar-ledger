@@ -25,6 +25,7 @@
     "db:migrate": "bun --filter @northstar/db migrate",
     "db:push": "bun --filter @northstar/db push",
     "db:studio": "bun --filter @northstar/db studio",
+    "db:init": "bun --filter @northstar/db init",
     "clean": "rm -rf packages/*/dist apps/*/dist internal/*/dist"
   },
   "devDependencies": {

@@ -21,9 +21,5 @@
     "@northstar/db": "workspace:*",
     "drizzle-orm": "^0.38.0",
     "zod": "^3.24.0"
-  },
-  "devDependencies": {
-    "better-sqlite3": "^11.7.0",
-    "@types/better-sqlite3": "^7.6.12"
   }
 }
