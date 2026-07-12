@@ -1,0 +1,35 @@
+{
+  "name": "northstar-ledger",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "workspaces": ["packages/*", "apps/*", "internal/*"],
+  "scripts": {
+    "dev": "concurrently \"bun dev:api\" \"bun dev:web\"",
+    "dev:api": "bun --filter @northstar/api dev",
+    "dev:web": "bun --filter @northstar/web dev",
+    "dev:cli": "bun --filter @northstar/cli dev",
+    "dev:worker": "bun --filter @northstar/worker dev",
+    "build": "bun --filter @northstar/shared build && bun --filter @northstar/db build && concurrently \"bun build:api\" \"bun build:web\" \"bun build:cli\" \"bun build:worker\"",
+    "build:api": "bun --filter @northstar/api build",
+    "build:web": "bun --filter @northstar/web build",
+    "build:cli": "bun --filter @northstar/cli build",
+    "build:worker": "bun --filter @northstar/worker build",
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check .",
+    "lint:fix": "biome check --apply .",
+    "format": "biome format --write .",
+    "test": "bun test",
+    "test:run": "bun test --run",
+    "check": "bun run typecheck && bun run lint && bun run test:run",
+    "db:migrate": "bun --filter @northstar/db migrate",
+    "db:push": "bun --filter @northstar/db push",
+    "db:studio": "bun --filter @northstar/db studio",
+    "clean": "rm -rf packages/*/dist apps/*/dist internal/*/dist"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
+    "concurrently": "^9.1.0",
+    "typescript": "^5.7.0"
+  }
+}
