@@ -1,4 +1,5 @@
 #!/usr/bin/env bun
+import { existsSync, readFileSync } from "node:fs";
 import type { CreateProjectInput } from "@northstar/domain";
 import {
   createAccount,
@@ -8,14 +9,18 @@ import {
   deleteAccount,
   deleteCustomer,
   deleteTransaction,
+  executeTransactionImport,
   getAccount,
+  getImportJob,
   getMonthlySummary,
   getPeriodSummary,
   getTransaction,
   listAccounts,
   listCustomers,
+  listImportJobs,
   listProjects,
   listTransactions,
+  previewTransactionImport,
 } from "@northstar/domain";
 import { Command } from "commander";
 import pino from "pino";
@@ -304,6 +309,136 @@ program
       console.log(`  总支出: ${data.totalExpense}`);
       console.log(`  净结余: ${data.netIncome}`);
       console.log(`  交易数: ${data.txCount}\n`);
+    }
+  });
+
+// ── 导入命令 ──
+
+const importCmd = program.command("import").description("CSV 数据导入");
+
+importCmd
+  .command("preview")
+  .description("预览 CSV 导入结果（不写入数据库）")
+  .requiredOption("--file <path>", "CSV 文件路径")
+  .requiredOption("--account-id <id>", "目标账户 ID")
+  .action((options) => {
+    if (!existsSync(options.file)) {
+      console.error("❌ 文件不存在:", options.file);
+      process.exit(1);
+    }
+    const csv = readFileSync(options.file, "utf-8");
+    const result = previewTransactionImport(csv, options.accountId);
+    console.log("\n📋 导入预览");
+    console.log(`  总行数: ${result.totalRows}`);
+    console.log(`  有效行: ${result.validRows}`);
+    console.log(`  错误行: ${result.errorRows}`);
+    console.log(`  重复行: ${result.duplicateRows}\n`);
+
+    if (result.errors.length > 0) {
+      console.log("⚠️  错误明细:");
+      for (const err of result.errors.slice(0, 10)) {
+        console.log(
+          `  行 ${err.row} | ${err.field}: ${err.message}${err.value ? ` (值: ${err.value})` : ""}`,
+        );
+      }
+      if (result.errors.length > 10) {
+        console.log(`  ... 还有 ${result.errors.length - 10} 条错误`);
+      }
+    }
+
+    if (result.preview.length > 0) {
+      console.log("📄 预览（前 10 条）:");
+      console.table(
+        result.preview.slice(0, 10).map((r) => ({
+          行: r.row,
+          类型: r.type,
+          金额: r.amount,
+          币种: r.currency,
+          日期: r.date,
+          描述: r.description,
+          状态: r.valid ? "✅" : "❌",
+        })),
+      );
+    }
+  });
+
+importCmd
+  .command("execute")
+  .description("执行 CSV 导入")
+  .requiredOption("--file <path>", "CSV 文件路径")
+  .requiredOption("--account-id <id>", "目标账户 ID")
+  .action((options) => {
+    if (!existsSync(options.file)) {
+      console.error("❌ 文件不存在:", options.file);
+      process.exit(1);
+    }
+    const csv = readFileSync(options.file, "utf-8");
+    console.log("⏳ 正在导入...");
+    try {
+      const result = executeTransactionImport(csv, options.accountId);
+      console.log("\n✅ 导入完成");
+      console.log(`  导入任务 ID: ${result.jobId.slice(0, 8)}...`);
+      console.log(`  成功导入: ${result.importedRows}`);
+      console.log(`  总行数: ${result.totalRows}`);
+      console.log(`  有效行: ${result.validRows}`);
+      console.log(`  错误行: ${result.errorRows}`);
+      console.log(`  重复行: ${result.duplicateRows}\n`);
+      if (result.errors.length > 0) {
+        console.log("⚠️  错误明细:");
+        for (const err of result.errors.slice(0, 10)) {
+          console.log(`  行 ${err.row} | ${err.field}: ${err.message}`);
+        }
+        if (result.errors.length > 10) {
+          console.log(`  ... 还有 ${result.errors.length - 10} 条错误`);
+        }
+      }
+    } catch (e) {
+      console.error("❌ 导入失败:", (e as Error).message);
+      process.exit(1);
+    }
+  });
+
+importCmd
+  .command("jobs")
+  .description("列出所有导入任务")
+  .option("--limit <number>", "限制条数", "20")
+  .option("--offset <number>", "偏移量", "0")
+  .action((options) => {
+    const items = listImportJobs(
+      Number.parseInt(options.limit, 10),
+      Number.parseInt(options.offset, 10),
+    );
+    if (items.length === 0) {
+      console.log("暂无导入任务");
+      return;
+    }
+    console.table(
+      items.map((j) => ({
+        ID: j.id.slice(0, 8),
+        类型: j.entityType,
+        状态: j.status,
+        总行: j.totalRows,
+        成功: j.importedRows,
+        错误: j.errorRows,
+        文件: j.fileName ?? "-",
+      })),
+    );
+  });
+
+importCmd
+  .command("job")
+  .description("查看导入任务详情")
+  .requiredOption("--id <id>", "任务 ID")
+  .action((options) => {
+    try {
+      const job = getImportJob(options.id);
+      console.log(JSON.stringify(job, null, 2));
+    } catch (e) {
+      if ((e as Error).message.includes("不存在")) {
+        console.error("❌ 任务不存在:", options.id);
+        process.exit(1);
+      }
+      throw e;
     }
   });
 

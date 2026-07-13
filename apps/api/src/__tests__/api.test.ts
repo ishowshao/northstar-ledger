@@ -482,4 +482,89 @@ describe("API Integration", () => {
       expect(body.data.netIncome).toBe(70000);
     });
   });
+
+  // ── Import ──
+
+  describe("Import", () => {
+    let accountId: string;
+
+    beforeAll(async () => {
+      const res = await req("/api/v1/accounts", {
+        method: "POST",
+        body: JSON.stringify({ name: "导入测试账户", type: "bank" }),
+      });
+      accountId = (await res.json()).data.id;
+    });
+
+    it("previews valid CSV", async () => {
+      const csv =
+        "date,amount,type,description\n2024-01-15,5000,income,咨询收入\n2024-01-20,3000,expense,办公费";
+      const res = await req("/api/v1/import/preview", {
+        method: "POST",
+        body: JSON.stringify({ csv, accountId }),
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.data.totalRows).toBe(2);
+      expect(body.data.validRows).toBe(2);
+      expect(body.data.errorRows).toBe(0);
+      expect(body.data.preview[0]?.valid).toBe(true);
+    });
+
+    it("preview returns errors for invalid data", async () => {
+      const csv = "date,amount,type\n2024-01-15,-100,income";
+      const res = await req("/api/v1/import/preview", {
+        method: "POST",
+        body: JSON.stringify({ csv, accountId }),
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.data.validRows).toBe(0);
+      expect(body.data.errorRows).toBeGreaterThan(0);
+    });
+
+    it("preview reports missing fields", async () => {
+      const csv = "foo,bar\n1,2";
+      const res = await req("/api/v1/import/preview", {
+        method: "POST",
+        body: JSON.stringify({ csv, accountId }),
+      });
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.data.validRows).toBe(0);
+      expect(body.data.errors[0]?.message).toContain("缺少必填字段");
+    });
+
+    it("executes valid CSV import", async () => {
+      const csv =
+        "date,amount,type,description\n2024-06-01,10000,income,导入收入1\n2024-06-02,5000,expense,导入支出1";
+      const res = await req("/api/v1/import/execute", {
+        method: "POST",
+        body: JSON.stringify({ csv, accountId }),
+      });
+      expect(res.status).toBe(201);
+      const body = await res.json();
+      expect(body.data.totalRows).toBe(2);
+      expect(body.data.importedRows).toBe(2);
+      expect(body.data.jobId).toBeDefined();
+
+      // Verify transactions were created by checking balance
+      const acctRes = await req(`/api/v1/accounts/${accountId}`);
+      const acct = await acctRes.json();
+      expect(acct.data.balance).toBe(5000); // 10000 - 5000 = 5000
+    });
+
+    it("lists import jobs", async () => {
+      const res = await req("/api/v1/import/jobs");
+      expect(res.status).toBe(200);
+      const body = await res.json();
+      expect(body.data.length).toBeGreaterThanOrEqual(1);
+      expect(body.data[0]?.entityType).toBe("transactions");
+    });
+
+    it("returns 404 for non-existent job", async () => {
+      const res = await req("/api/v1/import/jobs/00000000-0000-0000-0000-000000000000");
+      expect(res.status).toBe(404);
+    });
+  });
 });

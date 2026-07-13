@@ -45,7 +45,8 @@ describe("previewTransactionImport", () => {
   });
 
   it("parses valid CSV rows", () => {
-    const csv = "date,amount,type,description\n2024-01-15,5000,income,咨询收入\n2024-01-20,3000,expense,办公费";
+    const csv =
+      "date,amount,type,description\n2024-01-15,5000,income,咨询收入\n2024-01-20,3000,expense,办公费";
     const result = previewTransactionImport(csv, accountId);
     expect(result.totalRows).toBe(2);
     expect(result.validRows).toBe(2);
