@@ -20,6 +20,8 @@ export const importJobs = sqliteTable("import_jobs", {
   errorRows: integer("error_rows").notNull().default(0),
   duplicateRows: integer("duplicate_rows").notNull().default(0),
   importedRows: integer("imported_rows").notNull().default(0),
+  params: text("params"), // JSON: { csv, accountId, mapping } for async execution
+  progress: integer("progress").notNull().default(0), // 0-100 进度百分比
   errors: text("errors"), // JSON array of {row, field, message}
   summary: text("summary"), // JSON free-form summary message
   startedAt: text("started_at"),

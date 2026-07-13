@@ -5,6 +5,8 @@ import pino from "pino";
 import { accountsRoutes } from "./routes/accounts.js";
 import { customersRoutes } from "./routes/customers.js";
 import { importRoutes } from "./routes/imports.js";
+import { integrityRoutes } from "./routes/integrity.js";
+import { invoicesRoutes } from "./routes/invoices.js";
 import { projectsRoutes } from "./routes/projects.js";
 import { summaryRoutes } from "./routes/summary.js";
 import { transactionsRoutes } from "./routes/transactions.js";
@@ -40,6 +42,8 @@ api.route("/projects", projectsRoutes);
 api.route("/transactions", transactionsRoutes);
 api.route("/summary", summaryRoutes);
 api.route("/import", importRoutes);
+api.route("/integrity", integrityRoutes);
+api.route("/invoices", invoicesRoutes);
 
 app.route("/api/v1", api);
 

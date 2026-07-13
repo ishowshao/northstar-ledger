@@ -194,4 +194,97 @@ export const summaryApi = {
   },
   yearly: (year: number) =>
     request<{ data: PeriodSummary }>(`/summary/yearly?year=${year}`).then((r) => r.data),
+  projects: (dateFrom?: string, dateTo?: string) => {
+    const params = new URLSearchParams();
+    if (dateFrom) params.set("dateFrom", dateFrom);
+    if (dateTo) params.set("dateTo", dateTo);
+    const qs = params.toString();
+    return request<{ data: any[] }>(`/summary/projects${qs ? `?${qs}` : ""}`).then((r) => r.data);
+  },
+  customers: (dateFrom?: string, dateTo?: string) => {
+    const params = new URLSearchParams();
+    if (dateFrom) params.set("dateFrom", dateFrom);
+    if (dateTo) params.set("dateTo", dateTo);
+    const qs = params.toString();
+    return request<{ data: any[] }>(`/summary/customers${qs ? `?${qs}` : ""}`).then((r) => r.data);
+  },
+  cashflow: (year: number) =>
+    request<{ data: any[] }>(`/summary/cashflow?year=${year}`).then((r) => r.data),
+};
+
+// ── Invoices ──
+
+export interface Invoice {
+  id: string;
+  number: string;
+  customerId: string | null;
+  projectId: string | null;
+  status: "draft" | "sent" | "paid" | "overdue" | "cancelled";
+  issueDate: string;
+  dueDate: string;
+  subtotal: number;
+  taxRate: number;
+  taxAmount: number;
+  discount: number;
+  totalAmount: number;
+  currency: string;
+  notes: string | null;
+  billingName: string | null;
+  billingAddress: string | null;
+  sentAt: string | null;
+  paidAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface InvoiceItem {
+  id: string;
+  invoiceId: string;
+  description: string;
+  quantity: number;
+  unitPrice: number;
+  amount: number;
+  createdAt: string;
+}
+
+export interface CreateInvoiceInput {
+  customerId?: string;
+  projectId?: string;
+  issueDate: string;
+  dueDate: string;
+  taxRate?: number;
+  discount?: number;
+  notes?: string;
+  billingName?: string;
+  items: Array<{
+    description: string;
+    quantity: number;
+    unitPrice: number;
+  }>;
+}
+
+export const invoicesApi = {
+  list: () => request<{ data: Invoice[] }>("/invoices").then((r) => r.data),
+  get: (id: string) =>
+    request<{ data: { invoice: Invoice; items: InvoiceItem[] } }>(`/invoices/${id}`).then(
+      (r) => r.data,
+    ),
+  create: (input: CreateInvoiceInput) =>
+    request<{ data: { invoice: Invoice; items: InvoiceItem[] } }>("/invoices", {
+      method: "POST",
+      body: JSON.stringify(input),
+    }).then((r) => r.data),
+  send: (id: string) =>
+    request<{ data: { invoice: Invoice; items: InvoiceItem[] } }>(`/invoices/${id}/send`, {
+      method: "POST",
+    }).then((r) => r.data),
+  pay: (id: string) =>
+    request<{ data: { invoice: Invoice; items: InvoiceItem[] } }>(`/invoices/${id}/pay`, {
+      method: "POST",
+    }).then((r) => r.data),
+  cancel: (id: string) =>
+    request<{ data: { invoice: Invoice; items: InvoiceItem[] } }>(`/invoices/${id}/cancel`, {
+      method: "POST",
+    }).then((r) => r.data),
+  delete: (id: string) => request<{ success: boolean }>(`/invoices/${id}`, { method: "DELETE" }),
 };

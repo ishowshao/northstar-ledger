@@ -25,6 +25,10 @@ export function getDb(dbPath?: string) {
   return _client;
 }
 
+export function resetDb() {
+  _client = undefined;
+}
+
 export function createTestDb() {
   return drizzle<typeof schema>({
     connection: { source: ":memory:" },

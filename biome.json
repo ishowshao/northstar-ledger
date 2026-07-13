@@ -12,14 +12,22 @@
       },
       "a11y": {
         "noLabelWithoutControl": "off"
+      },
+      "style": {
+        "noNonNullAssertion": "off"
+      },
+      "suspicious": {
+        "noExplicitAny": "warn"
       }
-    }
+    },
+    "ignore": ["node_modules", "dist", "coverage"]
   },
   "formatter": {
     "enabled": true,
     "indentStyle": "space",
     "indentWidth": 2,
-    "lineWidth": 100
+    "lineWidth": 100,
+    "ignore": ["node_modules", "dist", "coverage"]
   },
   "javascript": {
     "formatter": {
@@ -27,8 +35,5 @@
       "semicolons": "always",
       "trailingCommas": "all"
     }
-  },
-  "files": {
-    "ignore": ["node_modules", "dist", "coverage"]
   }
 }

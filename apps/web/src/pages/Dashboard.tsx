@@ -27,6 +27,10 @@ export default function Dashboard() {
           <h3>➕ 新增交易</h3>
           <p>快速记录一笔交易</p>
         </Link>
+        <Link to="/invoices" className="nav-card">
+          <h3>📄 发票</h3>
+          <p>创建和管理发票</p>
+        </Link>
         <Link to="/summary" className="nav-card">
           <h3>📊 汇总</h3>
           <p>查看经营报表</p>

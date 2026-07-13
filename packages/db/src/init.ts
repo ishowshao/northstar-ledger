@@ -79,12 +79,49 @@ db.run(`CREATE TABLE IF NOT EXISTS import_jobs (
   error_rows INTEGER NOT NULL DEFAULT 0,
   duplicate_rows INTEGER NOT NULL DEFAULT 0,
   imported_rows INTEGER NOT NULL DEFAULT 0,
+  params TEXT,
+  progress INTEGER NOT NULL DEFAULT 0,
   errors TEXT,
   summary TEXT,
   started_at TEXT,
   completed_at TEXT,
   created_at TEXT NOT NULL,
   updated_at TEXT NOT NULL
+)`);
+
+// 创建 invoices 表
+db.run(`CREATE TABLE IF NOT EXISTS invoices (
+  id TEXT PRIMARY KEY,
+  number TEXT NOT NULL UNIQUE,
+  customer_id TEXT REFERENCES customers(id),
+  project_id TEXT REFERENCES projects(id),
+  status TEXT NOT NULL DEFAULT 'draft',
+  issue_date TEXT NOT NULL,
+  due_date TEXT NOT NULL,
+  subtotal INTEGER NOT NULL DEFAULT 0,
+  tax_rate INTEGER NOT NULL DEFAULT 0,
+  tax_amount INTEGER NOT NULL DEFAULT 0,
+  discount INTEGER NOT NULL DEFAULT 0,
+  total_amount INTEGER NOT NULL DEFAULT 0,
+  currency TEXT NOT NULL DEFAULT 'CNY',
+  notes TEXT,
+  billing_name TEXT,
+  billing_address TEXT,
+  sent_at TEXT,
+  paid_at TEXT,
+  created_at TEXT NOT NULL,
+  updated_at TEXT NOT NULL
+)`);
+
+// 创建 invoice_items 表
+db.run(`CREATE TABLE IF NOT EXISTS invoice_items (
+  id TEXT PRIMARY KEY,
+  invoice_id TEXT NOT NULL REFERENCES invoices(id) ON DELETE CASCADE,
+  description TEXT NOT NULL,
+  quantity INTEGER NOT NULL DEFAULT 1,
+  unit_price INTEGER NOT NULL DEFAULT 0,
+  amount INTEGER NOT NULL DEFAULT 0,
+  created_at TEXT NOT NULL
 )`);
 
 console.log(`✅ Database initialized at ${dbPath}`);

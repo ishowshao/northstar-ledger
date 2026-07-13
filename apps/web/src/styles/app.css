@@ -312,3 +312,143 @@ a:hover {
   color: var(--color-text-muted);
   font-size: 0.85rem;
 }
+
+/* ── Tabs ── */
+.tabs {
+  display: flex;
+  gap: 0.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.tab {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: transparent;
+  color: var(--color-text-muted);
+  cursor: pointer;
+  font-size: 0.875rem;
+  border-bottom: 2px solid transparent;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.tab:hover {
+  color: var(--color-text);
+}
+
+.tab-active {
+  color: var(--color-primary);
+  border-bottom-color: var(--color-primary);
+}
+
+/* ── Status Badge ── */
+.status-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  font-weight: 600;
+}
+
+.status-draft {
+  background: #fef3c7;
+  color: #d97706;
+}
+
+.status-sent {
+  background: #dbeafe;
+  color: #2563eb;
+}
+
+.status-paid {
+  background: #dcfce7;
+  color: #16a34a;
+}
+
+.status-overdue {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.status-cancelled {
+  background: #f1f5f9;
+  color: #64748b;
+}
+
+/* ── Card ── */
+.card {
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.card h4 {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* ── Invoice Detail Grid ── */
+.invoice-detail-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+/* ── Info Table ── */
+.info-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.info-table td {
+  padding: 0.5rem 1rem;
+  border-bottom: 1px solid var(--color-border);
+  font-size: 0.875rem;
+}
+
+.info-table td:first-child {
+  color: var(--color-text-muted);
+  width: 100px;
+}
+
+.info-table .total-row td {
+  font-weight: 700;
+  font-size: 1rem;
+  border-bottom: none;
+}
+
+/* ── Invoice Totals Preview ── */
+.invoice-totals-preview {
+  text-align: right;
+  padding: 1rem;
+  background: var(--color-bg);
+  border-radius: var(--radius);
+  margin: 1rem 0;
+}
+
+.invoice-totals-preview p {
+  margin: 0.25rem 0;
+  font-size: 0.875rem;
+}
+
+.invoice-totals-preview .total-final {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--color-success);
+}
+
+/* ── Wide Form ── */
+.form-wide {
+  max-width: 720px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}

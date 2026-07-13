@@ -3,6 +3,9 @@ import AccountForm from "./pages/AccountForm.js";
 import Accounts from "./pages/Accounts.js";
 import { CustomerForm, CustomerList } from "./pages/Customers.js";
 import Dashboard from "./pages/Dashboard.js";
+import InvoiceDetail from "./pages/InvoiceDetail.js";
+import InvoiceForm from "./pages/InvoiceForm.js";
+import Invoices from "./pages/Invoices.js";
 import { ProjectForm, ProjectList } from "./pages/Projects.js";
 import Summary from "./pages/Summary.js";
 import TransactionForm from "./pages/TransactionForm.js";
@@ -35,6 +38,9 @@ function Layout({ children }: { children: React.ReactNode }) {
             <Link to="/transactions">交易</Link>
           </li>
           <li>
+            <Link to="/invoices">发票</Link>
+          </li>
+          <li>
             <Link to="/summary">汇总</Link>
           </li>
         </ul>
@@ -57,6 +63,9 @@ export default function App() {
         <Route path="/projects/new" element={<ProjectForm />} />
         <Route path="/transactions" element={<Transactions />} />
         <Route path="/transactions/new" element={<TransactionForm />} />
+        <Route path="/invoices" element={<Invoices />} />
+        <Route path="/invoices/new" element={<InvoiceForm />} />
+        <Route path="/invoices/:id" element={<InvoiceDetail />} />
         <Route path="/summary" element={<Summary />} />
       </Routes>
     </Layout>

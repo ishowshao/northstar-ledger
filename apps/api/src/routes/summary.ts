@@ -1,8 +1,11 @@
 import { zValidator } from "@hono/zod-validator";
 import {
+  getCashFlow,
   getCategoryBreakdown,
+  getCustomerRevenue,
   getMonthlySummary,
   getPeriodSummary,
+  getProjectProfitability,
   getYearSummary,
 } from "@northstar/domain";
 import { Hono } from "hono";
@@ -73,6 +76,70 @@ router.get(
   (c) => {
     const { dateFrom, dateTo } = c.req.valid("query");
     const data = getCategoryBreakdown(dateFrom, dateTo);
+    return c.json({ data });
+  },
+);
+
+// ── R3: Enhanced Reports ──
+
+// GET /api/v1/summary/projects?dateFrom=...&dateTo=...
+router.get(
+  "/projects",
+  zValidator(
+    "query",
+    z.object({
+      dateFrom: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .optional(),
+      dateTo: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .optional(),
+    }),
+  ),
+  (c) => {
+    const { dateFrom, dateTo } = c.req.valid("query");
+    const data = getProjectProfitability(dateFrom, dateTo);
+    return c.json({ data });
+  },
+);
+
+// GET /api/v1/summary/customers?dateFrom=...&dateTo=...
+router.get(
+  "/customers",
+  zValidator(
+    "query",
+    z.object({
+      dateFrom: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .optional(),
+      dateTo: z
+        .string()
+        .regex(/^\d{4}-\d{2}-\d{2}$/)
+        .optional(),
+    }),
+  ),
+  (c) => {
+    const { dateFrom, dateTo } = c.req.valid("query");
+    const data = getCustomerRevenue(dateFrom, dateTo);
+    return c.json({ data });
+  },
+);
+
+// GET /api/v1/summary/cashflow?year=2025
+router.get(
+  "/cashflow",
+  zValidator(
+    "query",
+    z.object({
+      year: z.coerce.number().int().min(2000).max(2100),
+    }),
+  ),
+  (c) => {
+    const { year } = c.req.valid("query");
+    const data = getCashFlow(year);
     return c.json({ data });
   },
 );

@@ -20,5 +20,5 @@
     "noEmit": true,
     "composite": true
   },
-  "exclude": ["node_modules", "dist", "**/*.test.ts", "**/*.test.tsx"]
+  "exclude": ["node_modules", "dist", "scripts", "**/*.test.ts", "**/*.test.tsx"]
 }

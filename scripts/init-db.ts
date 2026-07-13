@@ -77,6 +77,8 @@ db.run(`CREATE TABLE IF NOT EXISTS import_jobs (
   error_rows INTEGER NOT NULL DEFAULT 0,
   duplicate_rows INTEGER NOT NULL DEFAULT 0,
   imported_rows INTEGER NOT NULL DEFAULT 0,
+  params TEXT,
+  progress INTEGER NOT NULL DEFAULT 0,
   errors TEXT,
   summary TEXT,
   started_at TEXT,
